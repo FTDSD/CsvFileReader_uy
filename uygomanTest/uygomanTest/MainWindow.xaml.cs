@@ -103,7 +103,15 @@ namespace uygomanTest
                             connection.Close();
                             sourcefile.Close();
                             connection.Close();
-                            File.Move(files, CommonValues.MovePath + "\\" + datetime + "." + CommonValues.FileExtention);
+                            bool isMovePathExist = Directory.Exists(CommonValues.MovePath);
+                            if (isMovePathExist)
+                            {
+                                File.Move(files, CommonValues.MovePath + "\\" + datetime + "." + CommonValues.FileExtention);
+                            }
+                            else {
+                                Directory.CreateDirectory(CommonValues.MovePath);
+                                MessageBox.Show("CSV File Moving Folder is Created");
+                            }
                         }
                     }
                     catch (InvalidOperationException ex)
@@ -116,17 +124,30 @@ namespace uygomanTest
                     }
                     catch (DirectoryNotFoundException ex)
                     {
+ 
                         MessageBox.Show(ex.Message);
                     }
                     catch (FileNotFoundException ex)
                     {
                         MessageBox.Show(ex.Message);
                     }
-                    catch (NullReferenceException ex) {
+                    catch (NullReferenceException ex)
+                    {
                         MessageBox.Show(ex.Message);
                     }
                 }
-                
+                else
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(sourcepath.Text);
+                    }
+                    catch (IOException ex) { MessageBox.Show(ex.Message); }
+                    catch (UnauthorizedAccessException ex) { MessageBox.Show(ex.Message); }
+
+                     
+                }
+
             }
         }
     }
